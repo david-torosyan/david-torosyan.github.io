@@ -1,8 +1,7 @@
 const canvas = document.getElementById('canvas');
-canvas.width = 1228;
-canvas.height = 583;
 canvas.style.backgroundColor = 'black';
-
+canvas.width = window.innerWidth * 0.8;
+canvas.height = window.innerHeight * 0.8;
 const ctx = canvas.getContext('2d');
 ctx.strokeStyle = 'white';
 
@@ -16,7 +15,6 @@ const colLength = 45;
 
 const cellWidth = canvas.width / colLength;
 const cellHeight = canvas.height / rowLength;
-
 
 let map = Array.from({ length: rowLength }, () => Array(colLength).fill(0));
 let running = false;
