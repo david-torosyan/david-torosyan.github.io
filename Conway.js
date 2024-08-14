@@ -1,6 +1,6 @@
 const canvas = document.getElementById('canvas');
-canvas.width = 1200;
-canvas.height = 1000;
+canvas.width = 1228;
+canvas.height = 583;
 canvas.style.backgroundColor = 'black';
 
 const ctx = canvas.getContext('2d');
@@ -10,8 +10,9 @@ const startButton = document.getElementById('startButton');
 const gridButton = document.getElementById('grid');
 
 let isGrid = false;
+
 const rowLength = 30;
-const colLength = 35;
+const colLength = 45;
 
 const cellWidth = canvas.width / colLength;
 const cellHeight = canvas.height / rowLength;
