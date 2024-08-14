@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Conway's Game of Life</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .button-container {
+            position: relative;
+            top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 25px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="button-container">
+        <button id="startButton">Start</button>
+        <button id="grid">Show #</button>
+    </div>
+    <script type="text/javascript" src="Conway.js"></script>
+</body>
+
+</html>
