@@ -36,11 +36,10 @@ function neighbors(map, x, y) {
     let count = 0;
 
     for (let i = 0; i < 8; i++) {
-        const checkX = x + HX[i];
-        const checkY = y + HY[i];
-        if (checkX >= 0 && checkX < rowLength && checkY >= 0 && checkY < colLength) {
-            count += map[checkX][checkY];
-        }
+        const checkX = (x + HX[i] + rowLength) % rowLength;
+        const checkY = (y + HY[i] + colLength) % colLength;
+
+        count += map[checkX][checkY];
     }
     return count;
 }
