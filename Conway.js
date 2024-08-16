@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas');
 canvas.style.backgroundColor = 'black';
 canvas.width = window.innerWidth * 0.6;
-canvas.height = window.innerHeight * 0.8;
+canvas.height = window.innerHeight * 0.7;
 const ctx = canvas.getContext('2d');
 ctx.strokeStyle = 'white';
 
