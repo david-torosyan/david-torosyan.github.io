@@ -9,14 +9,16 @@
 </head>
 
 <body>
+
+    <div id="generationDisplay">Generation: 0</div>
     <canvas id="canvas"></canvas>
     <div class="button-container">
-        <button id="Clear" style="background-color: red;">Clear</button>
-        <button id="startButton" style="background-color: green;">Start</button>
-        <button id="grid" style="background-color: grey;">Show #</button>
-        <button id="random" style="background-color: yellow;">Randomize</button>
+        <button id="Clear" style="background-color: rgb(253, 2, 2);">Clear</button>
+        <button id="startButton" style="background-color: rgb(1, 126, 1);">Start</button>
+        <button id="grid" style="background-color: rgb(143, 142, 142);">Show #</button>
+        <button id="random" style="background-color: rgb(105, 105, 5);">Randomize</button>
     </div>
-    <div id="generationDisplay">Generation: 0</div>
+    <input id="myRange" type="range" min="1" max="100" value="50">
     <script type="text/javascript" src="Conway.js"></script>
 </body>
 

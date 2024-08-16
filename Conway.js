@@ -10,7 +10,9 @@ const gridButton = document.getElementById('grid');
 const randomButton = document.getElementById('random');
 const clearButton = document.getElementById('Clear');
 const generationDisplay = document.getElementById('generationDisplay');
+const myRange = document.getElementById("myRange");
 
+let speed = 200;
 let isGrid = false;
 let color = { red: 255, green: 255, blue: 0 };
 const colorChangeSpeed = 15;
@@ -91,7 +93,7 @@ function gameLoop() {
 
         updateColor();
         generation++;
-        setTimeout(gameLoop, 200);
+        setTimeout(gameLoop, speed);
     }
 }
 
@@ -174,10 +176,19 @@ randomButton.addEventListener('click', () => {
 clearButton.addEventListener('click', () => {
     map = Array.from({ length: rowLength }, () => Array(colLength).fill(0));
     drawMap(map);
-    if(running)
+    if (running)
         startButton.click();
     generation = 0;
     generationDisplay.textContent = `Generation: ${generation}`;
+});
+
+myRange.addEventListener("input", function () {
+    const rangeValue = this.value;
+    speed = 1000 - (rangeValue * 10);
+    if (running) {
+        clearTimeout(gameLoopTimeout);
+        gameLoopTimeout = setTimeout(gameLoop, speed);
+    }
 });
 
 window.addEventListener('resize', () => {
@@ -187,3 +198,5 @@ window.addEventListener('resize', () => {
     cellHeight = canvas.height / rowLength;
     drawMap(map);
 });
+
+let gameLoopTimeout;
