@@ -8,9 +8,9 @@ ctx.strokeStyle = 'white';
 const startButton = document.getElementById('startButton');
 const gridButton = document.getElementById('grid');
 const randomButton = document.getElementById('random');
-const clearButton = document.getElementById('Clear');
+const clearButton = document.getElementById('clear');
 const generationDisplay = document.getElementById('generationDisplay');
-const myRange = document.getElementById("myRange");
+const range = document.getElementById("range");
 const shapeButton = document.getElementById('shape');
 
 let isCircle = false;
@@ -73,9 +73,16 @@ function update(map) {
 function drawMap(map) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    let count = 0;
     for (let i = 0; i < rowLength; i++) {
         for (let j = 0; j < colLength; j++) {
-            ctx.fillStyle = map[i][j] === 1 ? `rgb(${color.red}, ${color.green}, ${color.blue})` : 'rgb(0, 0, 0)';
+
+            if (map[i][j] === 1) {
+                count++;
+                ctx.fillStyle = `rgb(${color.red}, ${color.green}, ${color.blue})`;
+            } else {
+                ctx.fillStyle = 'rgb(0, 0, 0)';
+            }
 
             if (!isCircle) {
                 ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
@@ -96,16 +103,28 @@ function drawMap(map) {
     }
 
     generationDisplay.textContent = `Generation: ${generation}`;
+
+    if (count === 0) {
+        startButton.click();
+    }
 }
+
+function updateGneration() {
+    if (running)
+        generation++;
+};
+
+let gameLoopTimeout;
 
 function gameLoop() {
     if (running) {
         drawMap(map);
-        update(map);
+        updateGneration();
 
+        update(map);
         updateColor();
-        generation++;
-        setTimeout(gameLoop, speed);
+        
+        gameLoopTimeout = setTimeout(gameLoop, speed);
     }
 }
 
@@ -191,9 +210,10 @@ clearButton.addEventListener('click', () => {
         startButton.click();
     generation = 0;
     generationDisplay.textContent = `Generation: ${generation}`;
+    range.value = 50;
 });
 
-myRange.addEventListener("input", function () {
+range.addEventListener("input", function () {
     const rangeValue = this.value;
     speed = 1000 - (rangeValue * 10);
     if (running) {
@@ -216,5 +236,3 @@ window.addEventListener('resize', () => {
     cellHeight = canvas.height / rowLength;
     drawMap(map);
 });
-
-let gameLoopTimeout;
