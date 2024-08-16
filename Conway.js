@@ -11,7 +11,9 @@ const randomButton = document.getElementById('random');
 const clearButton = document.getElementById('Clear');
 const generationDisplay = document.getElementById('generationDisplay');
 const myRange = document.getElementById("myRange");
+const shapeButton = document.getElementById('shape');
 
+let isCircle = false;
 let speed = 200;
 let isGrid = false;
 let color = { red: 255, green: 255, blue: 0 };
@@ -74,7 +76,17 @@ function drawMap(map) {
     for (let i = 0; i < rowLength; i++) {
         for (let j = 0; j < colLength; j++) {
             ctx.fillStyle = map[i][j] === 1 ? `rgb(${color.red}, ${color.green}, ${color.blue})` : 'rgb(0, 0, 0)';
-            ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+
+            if (!isCircle) {
+                ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
+            } else {
+                const centerX = j * cellWidth + cellWidth / 2;
+                const centerY = i * cellHeight + cellHeight / 2;
+
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, Math.min(cellWidth, cellHeight) / 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
         }
     }
 
@@ -114,7 +126,6 @@ function updateColor() {
         color.green = 255;
         color.blue = 0;
     }
-    randomButton.style.backgroundColor = `rgb(${color.red}, ${color.green}, ${color.blue})`;
 }
 
 function HorizontalLines() {
@@ -189,6 +200,13 @@ myRange.addEventListener("input", function () {
         clearTimeout(gameLoopTimeout);
         gameLoopTimeout = setTimeout(gameLoop, speed);
     }
+});
+
+shapeButton.addEventListener('click', () => {
+    isCircle = !isCircle;
+    shapeButton.textContent = isCircle ? "⚫" : "🔲";
+    shapeButton.style.backgroundColor = isCircle ? 'white' : 'black';
+    drawMap(map);
 });
 
 window.addEventListener('resize', () => {
