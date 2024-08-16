@@ -1,23 +1,29 @@
 const canvas = document.getElementById('canvas');
 canvas.style.backgroundColor = 'black';
-canvas.width = window.innerWidth * 0.8;
+canvas.width = window.innerWidth * 0.6;
 canvas.height = window.innerHeight * 0.8;
 const ctx = canvas.getContext('2d');
 ctx.strokeStyle = 'white';
 
 const startButton = document.getElementById('startButton');
 const gridButton = document.getElementById('grid');
+const randomButton = document.getElementById('random');
+const clearButton = document.getElementById('Clear');
+const generationDisplay = document.getElementById('generationDisplay');
 
 let isGrid = false;
+let color = { red: 255, green: 255, blue: 0 };
+const colorChangeSpeed = 15;
 
 const rowLength = 30;
 const colLength = 45;
 
-const cellWidth = canvas.width / colLength;
-const cellHeight = canvas.height / rowLength;
+let cellWidth = canvas.width / colLength;
+let cellHeight = canvas.height / rowLength;
 
 let map = Array.from({ length: rowLength }, () => Array(colLength).fill(0));
 let running = false;
+let generation = 0;
 
 const HX = [-1, 1, 0, 0, -1, 1, -1, 1];
 const HY = [0, 0, -1, 1, -1, 1, 1, -1];
@@ -65,7 +71,7 @@ function drawMap(map) {
 
     for (let i = 0; i < rowLength; i++) {
         for (let j = 0; j < colLength; j++) {
-            ctx.fillStyle = map[i][j] === 1 ? 'yellow' : 'black';
+            ctx.fillStyle = map[i][j] === 1 ? `rgb(${color.red}, ${color.green}, ${color.blue})` : 'rgb(0, 0, 0)';
             ctx.fillRect(j * cellWidth, i * cellHeight, cellWidth, cellHeight);
         }
     }
@@ -74,14 +80,39 @@ function drawMap(map) {
         HorizontalLines();
         VerticalLines();
     }
+
+    generationDisplay.textContent = `Generation: ${generation}`;
 }
 
 function gameLoop() {
     if (running) {
         drawMap(map);
         update(map);
+
+        updateColor();
+        generation++;
         setTimeout(gameLoop, 200);
     }
+}
+
+function updateColor() {
+    if (color.red > 0 && color.blue === 0) {
+        color.red = Math.max(0, color.red - colorChangeSpeed);
+        color.green = Math.min(255, color.green + colorChangeSpeed);
+    } else if (color.green > 0 && color.red === 0) {
+        color.green = Math.max(0, color.green - colorChangeSpeed);
+        color.blue = Math.min(255, color.blue + colorChangeSpeed);
+    } else if (color.blue > 0 && color.green === 0) {
+        color.blue = Math.max(0, color.blue - colorChangeSpeed);
+        color.red = Math.min(255, color.red + colorChangeSpeed);
+    }
+
+    if (color.red === 0 && color.green === 0 && color.blue === 0) {
+        color.red = 255;
+        color.green = 255;
+        color.blue = 0;
+    }
+    randomButton.style.backgroundColor = `rgb(${color.red}, ${color.green}, ${color.blue})`;
 }
 
 function HorizontalLines() {
@@ -124,7 +155,35 @@ gridButton.addEventListener('click', () => {
 startButton.addEventListener('click', () => {
     running = !running;
     startButton.textContent = running ? "Stop" : "Start";
+    startButton.style.backgroundColor = running ? 'orange' : 'green';
     drawMap(map);
 
     if (running) gameLoop();
+    else drawMap(map);
+});
+
+randomButton.addEventListener('click', () => {
+    for (let i = 0; i < 16; i++) {
+        let randomRow = Math.floor(Math.random() * rowLength);
+        let randomCol = Math.floor(Math.random() * colLength);
+        map[randomRow][randomCol] = 1;
+    }
+    drawMap(map);
+});
+
+clearButton.addEventListener('click', () => {
+    map = Array.from({ length: rowLength }, () => Array(colLength).fill(0));
+    drawMap(map);
+    if(running)
+        startButton.click();
+    generation = 0;
+    generationDisplay.textContent = `Generation: ${generation}`;
+});
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth * 0.6;
+    canvas.height = window.innerHeight * 0.8;
+    cellWidth = canvas.width / colLength;
+    cellHeight = canvas.height / rowLength;
+    drawMap(map);
 });
